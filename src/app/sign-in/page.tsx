@@ -1,6 +1,7 @@
 'use client'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { TextField, styled } from '@mui/material'
+import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/Button'
 import { Flex } from '@/components/ui/Flex'
@@ -15,6 +16,7 @@ type MyResponse = Response & {
 }
 
 export default function SignIn() {
+  const router = useRouter()
   const {
     handleSubmit,
     setValue,
@@ -38,6 +40,7 @@ export default function SignIn() {
         localStorage.setItem('client', response.headers.get('client') || '')
         localStorage.setItem('uid', response.headers.get('uid') || '')
         alert('You logged in successfully!')
+        router.push('/')
       }
     } catch (error) {
       console.error('Error:', error)
@@ -50,30 +53,17 @@ export default function SignIn() {
         <StyledFlex $direction='column' $content='center' $gap='20px'>
           <h1>Sign in</h1>
           <TextField
-            name='name'
-            label='Outlined'
-            variant='outlined'
-            onChange={(e) => setValue('name', e.target.value)}
-          />
-          <TextField
             name='email'
-            label='Outlined'
+            label='Email'
             variant='outlined'
             onChange={(e) => setValue('email', e.target.value)}
           />
           <TextField
             name='password'
             type='password'
-            label='Outlined'
+            label='Password'
             variant='outlined'
             onChange={(e) => setValue('password', e.target.value)}
-          />
-          <TextField
-            name='confirmPassword'
-            type='password'
-            label='Outlined'
-            variant='outlined'
-            onChange={(e) => setValue('confirmPassword', e.target.value)}
           />
           <Button type='submit' variant='contained'>
             Sign in
