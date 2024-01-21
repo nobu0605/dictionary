@@ -22,7 +22,16 @@ export default function Home() {
 
         setWordResults(data.word)
         setExampleResults(data.examples)
+        return
       }
+
+      if (res.status === 404) {
+        const data = await res.json()
+        alert(data.message)
+      }
+
+      setWordResults(undefined)
+      setExampleResults(undefined)
     } catch (error) {
       console.error('Error:', error)
     }
