@@ -5,9 +5,9 @@ export const signInSchema = z.object({
   email: z.string().email(),
   password: z
     .string()
-    .min(8, { message: '8桁以上のパスワードを入力してください' })
+    .min(8, { message: 'Please enter a password of 8 digits or more.' })
     .regex(/^[a-zA-Z0-9]+$/, {
-      message: '英大文字、英小文字、数字で入力してください',
+      message: 'Please enter uppercase letters, lowercase letters, and numbers.',
     }),
 })
 

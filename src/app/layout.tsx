@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Providers } from '@/app/providers'
 import StyledComponentsRegistry from '@/lib/registry'
 import './globals.css'
 
@@ -11,7 +12,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='en'>
       <body>
-        <StyledComponentsRegistry>{children}</StyledComponentsRegistry>
+        <StyledComponentsRegistry>
+          <Providers>{children}</Providers>
+        </StyledComponentsRegistry>
       </body>
     </html>
   )

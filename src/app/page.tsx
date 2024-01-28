@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/Button'
 import { Card } from '@/components/ui/Card'
 import { Flex } from '@/components/ui/Flex'
 import { ExampleResponse, WordResponse, Result } from '@/types/word'
-import { fetchFromAPI } from '@/utils/fetch'
+import { getWithToken } from '@/utils/fetchFromAPI'
 
 export default function Home() {
   const [searchWord, setSearchWord] = useState('')
@@ -16,7 +16,7 @@ export default function Home() {
     e.preventDefault()
 
     try {
-      const res = await fetchFromAPI(`/api/search_word?word=${searchWord}`, 'GET')
+      const res = await getWithToken(`/api/search_word?word=${searchWord}`)
       if (res.ok) {
         const data = await res.json()
 
