@@ -5,37 +5,28 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/Button'
 import { Flex } from '@/components/ui/Flex'
-import { signInSchema, SignInSchemaType } from '@/features/sign-in/schema'
+import { signUpSchema, SignUpSchemaType } from '@/features/sign-up/schema'
 import { postWithToken } from '@/utils/fetchFromAPI'
 
-type SignInResponse = Response & {
-  headers: {
-    get(name: 'uid'): string | null
-    get(name: 'access-token'): string | null
-    get(name: 'client'): string | null
-  }
-}
-
-export default function SignIn() {
+export default function SignUp() {
   const router = useRouter()
   const {
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<SignInSchemaType>({
-    resolver: zodResolver(signInSchema),
+  } = useForm<SignUpSchemaType>({
+    resolver: zodResolver(signUpSchema),
   })
 
-  async function onSubmit(data: SignInSchemaType) {
+  async function onSubmit(data: SignUpSchemaType) {
     try {
-      const response: SignInResponse = await postWithToken('/api/auth/sign_in', data)
-
-      if (response.ok) {
-        localStorage.setItem('access-token', response.headers.get('access-token') || '')
-        localStorage.setItem('client', response.headers.get('client') || '')
-        localStorage.setItem('uid', response.headers.get('uid') || '')
-        alert('You logged in successfully!')
-        router.push('/')
+      const res = await postWithToken('/api/auth', {
+        ...data,
+        confirm_success_url: `${process.env.NEXT_PUBLIC_CLIENT_URL}/sign-in`,
+      })
+      if (res.ok) {
+        alert('You signed up successfully!')
+        router.push('/sign-in')
       }
     } catch (error) {
       console.error('Error:', error)
@@ -46,7 +37,15 @@ export default function SignIn() {
     <Flex $content='center'>
       <form onSubmit={handleSubmit(onSubmit)}>
         <StyledFlex $direction='column' $content='center' $gap='20px'>
-          <h1>Sign in</h1>
+          <h1>Sign up</h1>
+          <TextField
+            name='name'
+            label='Name'
+            variant='outlined'
+            onChange={(e) => setValue('name', e.target.value)}
+            error={!!errors.name}
+            helperText={errors.name?.message}
+          />
           <TextField
             name='email'
             label='Email'
@@ -64,8 +63,17 @@ export default function SignIn() {
             error={!!errors.password}
             helperText={errors.password?.message}
           />
+          <TextField
+            name='password_confirmation'
+            type='password'
+            label='Password'
+            variant='outlined'
+            onChange={(e) => setValue('password_confirmation', e.target.value)}
+            error={!!errors.password_confirmation}
+            helperText={errors.password_confirmation?.message}
+          />
           <Button type='submit' variant='contained'>
-            Sign in
+            Sign up
           </Button>
         </StyledFlex>
       </form>

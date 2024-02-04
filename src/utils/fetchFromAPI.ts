@@ -1,7 +1,3 @@
-const defaultHeaders = {
-  'Content-Type': 'application/json',
-}
-
 function setHeaders(headers?: HeadersInit) {
   let headersForAuth = {}
   if (typeof window !== 'undefined') {
@@ -9,10 +5,11 @@ function setHeaders(headers?: HeadersInit) {
       'access-token': localStorage.getItem('access-token') || '',
       client: localStorage.getItem('client') || '',
       uid: localStorage.getItem('uid') || '',
+      'Content-Type': 'application/json',
     }
   }
 
-  const headerValues = Object.assign({}, headersForAuth, headers ? headers : defaultHeaders)
+  const headerValues = headers ? Object.assign(headersForAuth, headers) : headersForAuth
   return headerValues
 }
 
