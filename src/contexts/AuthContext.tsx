@@ -23,7 +23,7 @@ const AuthContext = createContext<
   | undefined
 >(undefined)
 
-const urlsWithoutAuth = ['/sign-in']
+const urlsWithoutAuth = ['/sign-in', '/sign-up']
 
 type Props = {
   children: React.ReactNode
