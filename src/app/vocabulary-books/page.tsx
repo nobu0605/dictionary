@@ -1,10 +1,9 @@
 'use client'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { TextField, styled } from '@mui/material'
+import { TextField, styled, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import React, { useContext, useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/Button'
-import { Card } from '@/components/ui/Card'
 import { Flex } from '@/components/ui/Flex'
 import { AuthContext } from '@/contexts/AuthContext'
 import {
@@ -19,13 +18,13 @@ export default function VocabularyBooks() {
   const state = useContext(AuthContext)
   const userState = state?.authState.user
   const isLoading = state?.authState.isLoading
-  const [vocabularyBooksList, setVocabularyBooksList] = useState<VocabularyBook[]>([])
+  const [vocabularyBooks, setVocabularyBooks] = useState<VocabularyBook[]>([])
 
   async function listVocabularyBooks() {
     const res = await getWithToken(`/api/vocabulary_books/list?user_id=${userState?.id}}`)
     if (res.ok) {
       const data = await res.json()
-      setVocabularyBooksList(data.vocabulary_book)
+      setVocabularyBooks(data.vocabulary_books)
       return
     }
   }
@@ -112,26 +111,58 @@ export default function VocabularyBooks() {
       </Flex>
       <Flex $content='center'>
         <StyledVocabularyBooksFlex $direction='column' $gap={'20px'}>
-          {vocabularyBooksList.map((vocabularyBook: VocabularyBook, i) => (
-            <Card key={i}>
-              <Flex $direction='column'>
-                <span>id: {vocabularyBook.id}</span>
-                <span>name: {vocabularyBook.name}</span>
-                <span>description: {vocabularyBook.description}</span>
-                <span>created date: {formatDate(vocabularyBook.created_at)}</span>
-                <StyledVocabularyBooksDeleteWrapper>
-                  <Button
-                    size='small'
-                    variant='contained'
-                    color='inherit'
-                    onClick={() => deleteVocabularyBook(vocabularyBook.id)}
-                  >
-                    delete
-                  </Button>
-                </StyledVocabularyBooksDeleteWrapper>
-              </Flex>
-            </Card>
-          ))}
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell align='center'>id</TableCell>
+                <TableCell align='center'>Name</TableCell>
+                <TableCell align='center'>Description</TableCell>
+                <TableCell align='center'>Created date</TableCell>
+                <TableCell align='center'>Detail</TableCell>
+                <TableCell align='center'>Delete</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {vocabularyBooks.map((vocabularyBook: VocabularyBook, i) => (
+                <TableRow key={i}>
+                  <TableCell align='center' component='th' scope='row'>
+                    <span>{vocabularyBook.id}</span>
+                  </TableCell>
+                  <TableCell align='center'>
+                    <span>{vocabularyBook.name}</span>
+                  </TableCell>
+                  <TableCell align='center'>
+                    <span>{vocabularyBook.description}</span>
+                  </TableCell>
+                  <TableCell align='center'>
+                    <span>{formatDate(vocabularyBook.created_at)}</span>
+                  </TableCell>
+                  <TableCell align='center'>
+                    <Button
+                      href={`/vocabulary-books/${vocabularyBook.id}`}
+                      size='small'
+                      variant='contained'
+                      color='inherit'
+                    >
+                      detail
+                    </Button>
+                  </TableCell>
+                  <TableCell align='right'>
+                    <StyledVocabularyBooksDeleteWrapper>
+                      <Button
+                        size='small'
+                        variant='contained'
+                        color='inherit'
+                        onClick={() => deleteVocabularyBook(vocabularyBook.id)}
+                      >
+                        delete
+                      </Button>
+                    </StyledVocabularyBooksDeleteWrapper>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </StyledVocabularyBooksFlex>
       </Flex>
     </>

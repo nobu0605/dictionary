@@ -4,11 +4,14 @@ export type Result = {
   partOfSpeech: string
   synonyms: string[]
   typeOf: string[]
+  examples?: string[]
 }
+
+export type Pronunciation = { all: string }
 
 export type WordResponse = {
   frequency: number
-  pronunciation: { all: string }
+  pronunciation: Pronunciation
   results: Result[]
   syllables: { count: number; list: number[] }
   word: string
