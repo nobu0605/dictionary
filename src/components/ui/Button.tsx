@@ -1,5 +1,5 @@
 import { Button as MuiButton } from '@mui/material'
-import { ReactNode } from 'react'
+import { ReactNode, MouseEvent } from 'react'
 
 type Props = {
   children: ReactNode | string
@@ -9,8 +9,9 @@ type Props = {
   size?: 'small' | 'medium' | 'large'
   color?: 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'
   disabled?: boolean
-  onClick?: () => void
+  onClick?: (e: MouseEvent<HTMLButtonElement>) => void
   type?: 'button' | 'submit' | 'reset'
+  href?: string
 }
 
 export function Button({
@@ -23,6 +24,7 @@ export function Button({
   disabled,
   onClick,
   type,
+  href,
 }: Props) {
   return (
     <MuiButton
@@ -34,6 +36,7 @@ export function Button({
       disabled={disabled}
       onClick={onClick}
       type={type}
+      href={href}
     >
       {children}
     </MuiButton>
